@@ -429,7 +429,7 @@ defmodule Combine.Parsers.Text do
     when is_binary(expected) do
       byte_size = :erlang.size(expected)
       case input do
-        <<^expected::binary-size(byte_size), rest::binary>> ->
+        <<^expected::binary-size(^byte_size), rest::binary>> ->
           new_col = col + byte_size
           %{state | :column => new_col, :input => rest, :results => [expected|results]}
         _ ->
@@ -484,9 +484,6 @@ defmodule Combine.Parsers.Text do
         rest = binary_part(input, len, :erlang.byte_size(input) - len)
         %{state | :column => col + len, :input => rest, results: [word|results]}
     end
-  end
-  defp word_of_impl(%ParserState{status: :ok} = state, _pattern) do
-    %{state | :status => :error, :error => "Expected word, but hit end of input."}
   end
 
   @doc """
